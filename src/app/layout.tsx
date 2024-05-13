@@ -19,6 +19,8 @@ export default function RootLayout({children}:{children: React.ReactNode}) {
     <html lang="en" className={clsx(
       'h-full scroll-smooth bg-white antialiased',
     )}>
+      <link rel="icon" href="/favicon.ico" sizes="any" />
+      <link rel="canonical" href="https://www.zer0cheros.fi" />
       <body className='h-full w-full font-kode font-extrabold'>
         <Container>
           {children}

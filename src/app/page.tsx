@@ -8,6 +8,7 @@ import Navbar from "@/components/layout/Navbar";
 import Fade from "@/components/animation/Fade";
 import Footer from "@/components/layout/Footer";
 import { DataStructure } from "./types";
+import { MouseParallax, ScrollParallax } from "react-just-parallax";
 
 export default function Home( {searchParams}: {searchParams: { box: keyof DataStructure}}) {
   return (

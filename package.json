@@ -10,13 +10,17 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",
+    "@react-three/drei": "^9.105.6",
+    "@react-three/fiber": "^8.16.6",
     "@vercel/analytics": "^1.2.2",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.5",
     "next": "^14.2.3",
     "react": "^18",
     "react-dom": "^18",
-    "react-just-parallax": "^3.1.16"
+    "react-just-parallax": "^3.1.16",
+    "three": "^0.164.1",
+    "three-stdlib": "^2.30.0"
   },
   "devDependencies": {
     "@types/node": "^20",

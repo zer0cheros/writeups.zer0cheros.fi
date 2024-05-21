@@ -3,6 +3,7 @@ import React from 'react'
 import Image from 'next/image'
 import Icons from '../HTB/Icons'
 import { MouseParallax, ScrollParallax } from "react-just-parallax";
+import Experience from '../3d/Experience';
 const htb = [
   {
     title: 'Bizness', img: 'https://labs.hackthebox.com/storage/avatars/1919b64800f6676d0c0d285a9d664cee.png'
@@ -22,7 +23,9 @@ export default function Hero() {
       
     <div className='relative bg-white top-0 min-h-[100vh] left-0 w-1/3 h-full max-md:hidden'>
         <div className='absolute left-0 z-20 rounded-br-[350px] h-[90%] w-full bg-lime-600'/>
-        <Image className='absolute z-30 w-full min-w-[1100px] max-lg:min-w-[700px] h-full' src={'/lap.png'} alt={''} width={1600} height={1700} />
+        <div className='absolute z-50 w-1/2 min-w-[1000px] max-lg:z-20 max-lg:min-w-[700px] h-full'>
+          <Experience />
+        </div>
         <div className='absolute top-0 left-0 z-30 w-full rounded-br-[350px] shadow-xl h-[90%] bg-gradient-to-b from-transparent to-white' >
         </div>
     </div>

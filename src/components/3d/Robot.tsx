@@ -32,7 +32,9 @@ export function Model(props: JSX.IntrinsicElements['group']) {
     const handleMouseMove = (event: MouseEvent) => {
       setMouse({ x: (event.clientX / window.innerWidth) * 3 - 1, y: -(event.clientY / window.innerHeight) * 3 + 1 })
     }
-    actions['Armature|mixamo.com|Layer0']!.reset().play() 
+    if(actions['Armature|mixamo.com|Layer0']){
+      actions['Armature|mixamo.com|Layer0']!.reset().play() 
+    }
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])

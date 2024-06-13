@@ -23,7 +23,7 @@ export default function Hero() {
       
     <div className='relative bg-white top-0 min-h-[100vh] left-0 w-1/3 h-full max-md:hidden'>
         <div className='absolute left-0 z-20 rounded-br-[350px] h-[90%] w-full bg-lime-600'/>
-        <div className='absolute z-50 w-full min-w-[1000px] max-[1960px]:min-w-[1000px] max-lg:z-20 max-lg:min-w-[700px] h-full'>
+        <div className='absolute z-50 w-full min-w-[1500px] max-[1960px]:min-w-[1000px] max-lg:z-20 max-lg:min-w-[700px] h-full'>
           <Experience />
         </div>
         <div className='absolute top-0 left-0 z-30 w-full rounded-br-[350px] shadow-xl h-[90%] bg-gradient-to-b from-transparent to-white' >
